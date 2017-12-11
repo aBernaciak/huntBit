@@ -1,20 +1,18 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import BFX from 'bitfinex-api-node';
+import { db } from './firebase.js';
 
-var VueFire = require('vuefire')
+const VueFire = require('vuefire')
+Vue.prototype.$bfx = BFX
 
 Vue.use(Vuex)
 Vue.use(VueFire)
 
 export default new Vuex.Store({
-  // state: {
-  //   cardsArray: Cards
-  // },
-  // mutations: {
-  //   updateCards(state, newCards) {
-  //     return state.cardsArray = newCards;
-  //   }
-  // },
+  state: {
+    cardsViewed: db.ref('sampledata')
+  },
   modules: {
     splitter: {
       namespaced: true,
