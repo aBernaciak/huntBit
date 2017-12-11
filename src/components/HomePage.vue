@@ -41,17 +41,7 @@
 </template>
 
 <script>
-var firebase = require('firebase');
-var config = {
-  apiKey: "AIzaSyBj6t1vuQtKcOtIhr4DNLRpl9Slcupo1IE",
-  authDomain: "hunt-bitwhale.firebaseapp.com",
-  databaseURL: "https://hunt-bitwhale.firebaseio.com",
-  projectId: "hunt-bitwhale",
-  storageBucket: "hunt-bitwhale.appspot.com",
-  messagingSenderId: "1093868288427"
-};
-const firebaseApp = firebase.initializeApp(config);
-const db = firebaseApp.database()
+import { db } from '../store/firebase.js';
 let exampleRef = db.ref('sampledata');
 
 export default {
@@ -60,6 +50,9 @@ export default {
   data () {
     return {
       newItem: '',
+      apiData: '',
+      bfxAuth: '',
+      apiInterval: ''
     }
   },
   firebase: {
@@ -77,6 +70,18 @@ export default {
         this.newItem = '';
       }
     },
+    callCoinMarketApi() {
+      // const request = new this.$bfx('5AtwitKhDZjAsbwMfFuWhaH67rtf1D8fylRHl2q4glF', 'Xr1BYSuRMZOkZTb7JnvZOZMznsecNVS3eaGnC7THV09', {version: 1,}).rest 
+      // request.orderbook('BTCUSD', (err, res) => {
+      //   if (err) console.log(err)
+      //   console.log(res)
+      // })
+      const bfxRest = new this.$bfx('', '', {version: 1}).rest
+      bfxRest.stats('BTCUSD', (err, res) => {
+        if (err) console.log(err)
+        console.log(err)
+      })
+    },
     onOffline() {
       this.$ons.notification.alert(`
         Seems like there is no Internet Connection. There might by problems with loading images.
@@ -87,6 +92,22 @@ export default {
   },
   created() {
     document.addEventListener("offline", this.onOffline, false);
+    this.callCoinMarketApi();
+
+    // const bws = new this.$bfx('DNQv34NxXguC', 'JrJ2KG8Q70jjzo', {version: 2,
+    //   transform: true}).ws;
+
+    // bws.on('open', () => {
+    //   bws.subscribeTicker('BTCUSD')
+    //   bws.subscribeOrderBook('BTCUSD')
+    //   bws.subscribeTrades('BTCUSD')
+
+    //   // authenticate
+    //   // bws.auth()
+    // })
+
+    // this.apiInterval = setInterval(function(){alert("Interval reached");}, 5000);
+    // clearInterval(this.apiInterval);
   }
 }
 </script>
